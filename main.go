@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/google/go-github/v33/github"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/context"
@@ -42,7 +43,11 @@ var ctx = context.Background()
 var ci ciProvider
 
 func main() {
-	setVarsFromEnv()
+	err := setVarsFromEnv()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	ci = &GitHub{}
 	ci.getClient()
 
@@ -52,11 +57,12 @@ func main() {
 
 	srv := &http.Server{
 		Handler: router,
-		Addr:    ":80",
+		Addr:    "localhost:80",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
+	fmt.Println("GO web server is running on http://" + srv.Addr)
 	log.Fatal(srv.ListenAndServe())
 }
 
@@ -138,16 +144,18 @@ func HealthCheckHandler(w http.ResponseWriter, req *http.Request) {
 // Some helper functions
 
 // setVarsFromEnv sets global vars from .env
-func setVarsFromEnv() {
+func setVarsFromEnv() error {
 	token = os.Getenv("GITHUB_ACCESS_TOKEN")
 	if token == "" {
-		log.Fatal("No GITHUB_ACCESS_TOKEN set in .env")
+		return errors.New("No GITHUB_ACCESS_TOKEN set in .env")
 	}
 
 	au := os.Getenv("ALLOWED_USERS")
 	if au != "" {
 		users = strings.Split(au, ",")
 	}
+
+	return nil
 }
 
 // Contains tells whether a contains x.
