@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/google/go-github/v33/github"
 	"github.com/gorilla/mux"
 	"golang.org/x/net/context"
@@ -62,7 +61,7 @@ func main() {
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-	fmt.Println("GO web server is running on http://" + srv.Addr)
+	log.Println("GO web server is running on http://" + srv.Addr)
 	log.Fatal(srv.ListenAndServe())
 }
 
@@ -118,7 +117,7 @@ func (t *GitHub) getStatus(vars map[string]string) (shieldSchema, error) {
 
 // CiStatusHandler returns actual data for a badge in JSON format
 func CiStatusHandler(w http.ResponseWriter, req *http.Request) {
-	log.Print("hit")
+	log.Print("hit " + req.URL.String())
 	vars := mux.Vars(req)
 	resp, err := ci.getStatus(vars)
 	if err != nil {
@@ -145,6 +144,7 @@ func HealthCheckHandler(w http.ResponseWriter, req *http.Request) {
 
 // setVarsFromEnv sets global vars from .env
 func setVarsFromEnv() error {
+	//os.Setenv("GITHUB_ACCESS_TOKEN", "your_token")
 	token = os.Getenv("GITHUB_ACCESS_TOKEN")
 	if token == "" {
 		return errors.New("No GITHUB_ACCESS_TOKEN set in .env")
