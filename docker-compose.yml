@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  badges:
+    image: "ghcr.io/vitr/github-badges"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - GITHUB_ACCESS_TOKEN=${GITHUB_ACCESS_TOKEN}
+      - ALLOWED_USERS=${ALLOWED_USERS}

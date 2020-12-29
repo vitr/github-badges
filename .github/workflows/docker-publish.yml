@@ -1,0 +1,19 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.0.0
+
+      - name: Publish Image
+        uses: matootie/github-docker@v3.1.0
+        with:
+          accessToken: ${{ secrets.GH_REGISTRY_TOKEN }}
+          containerRegistry: true
