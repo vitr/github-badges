@@ -7,5 +7,5 @@ services:
     ports:
       - "88:80"
     environment:
-      - GITHUB_ACCESS_TOKEN=${GITHUB_ACCESS_TOKEN}
-      - ALLOWED_USERS=${ALLOWED_USERS}
+      - GITHUB_ACCESS_TOKEN
+      - ALLOWED_USERS
