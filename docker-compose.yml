@@ -5,7 +5,7 @@ services:
     image: "ghcr.io/vitr/github-badges"
     restart: unless-stopped
     ports:
-      - "88:80"
+      - "80:80"
     environment:
       - GITHUB_ACCESS_TOKEN
       - ALLOWED_USERS

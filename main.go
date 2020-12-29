@@ -56,12 +56,12 @@ func main() {
 
 	srv := &http.Server{
 		Handler: router,
-		Addr:    "localhost:80",
+		Addr:    ":80",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-	log.Println("GO web server is running on http://" + srv.Addr)
+	log.Println("GO web server is running on http://localhost" + srv.Addr)
 	log.Fatal(srv.ListenAndServe())
 }
 
